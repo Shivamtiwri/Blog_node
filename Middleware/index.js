@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken");
 const secretKey = "hello";
 const os = require("os");
 const crypto = require("crypto");
+const multer = require("multer");
+const path = require("path");
 
 async function Verify(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -34,13 +36,45 @@ async function Verify(req, res, next) {
   }
 }
 
-function getDeviceId() {
-  const networkInterfaces = os.machine();
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "Public/"); // Destination folder for uploads
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(
+      null,
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+    ); // File name generation with extension
+  },
+});
 
-  return JSON.stringify(networkInterfaces);
+// File filter to allow only image files
+const fileFilter = function (req, file, cb) {
+  const filetypes = /jpeg|jpg|png/;
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = filetypes.test(file.mimetype);
+
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb("Error: Images Only!"); // Reject the file
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+});
+
+function getDeviceId(req) {
+  const cleanIp = req.ip.replace(/^.*:/, ""); // Removes everything up to the last colon
+  const lastValue = cleanIp.split(".");
+  return lastValue[3];
 }
 
 module.exports = {
   Verify,
   getDeviceId,
+  upload,
 };

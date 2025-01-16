@@ -2,8 +2,6 @@ const { adminLoginModle, AddBlogModel } = require("../Model/adminModel");
 const jwt = require("jsonwebtoken");
 const secretKey = "hello";
 
-const { getDeviceId } = require("../Middleware");
-
 async function adminLogin(req, res) {
   try {
     const { email, password } = req.body;
@@ -35,7 +33,7 @@ async function adminLogin(req, res) {
     }
 
     // Check if password matches
-    if (user.password !== Number(password)) {
+    if (user.password !== password) {
       return res.status(401).json({
         Response_code: 401,
         msg: "Unauthorized user - Invalid password.",
@@ -60,8 +58,8 @@ async function adminLogin(req, res) {
 }
 
 async function adminAddBlog(req, res) {
-  console.log("Device ID:", getDeviceId());
   const adminId = req.adminId;
+  const filePath = req.file.path;
   try {
     const { title, meta_title, description } = req.body;
 
@@ -90,7 +88,7 @@ async function adminAddBlog(req, res) {
         msg: "Enter Description... !",
       });
     }
-    AddBlogModel(req, adminId, (err, result) => {
+    AddBlogModel(req, adminId, filePath, (err, result) => {
       if (err) {
         res.status(500).json(err);
       } else {

@@ -24,32 +24,31 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin`
+-- Table structure for table `like_table`
 --
 
-CREATE TABLE `admin` (
+CREATE TABLE `like_table` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `created_date` datetime NOT NULL DEFAULT current_timestamp()
+  `device_id` varchar(255) NOT NULL,
+  `like_status` tinyint(1) NOT NULL,
+  `blog_id` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `admin`
+-- Dumping data for table `like_table`
 --
 
-INSERT INTO `admin` (`id`, `name`, `email`, `password`, `created_date`) VALUES
-(1, 'raddy', 'admin@demo.com', 'admin', '2025-01-15 16:04:37');
+INSERT INTO `like_table` (`id`, `device_id`, `like_status`, `blog_id`) VALUES
+(2, '162', 1, '3');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `admin`
+-- Indexes for table `like_table`
 --
-ALTER TABLE `admin`
+ALTER TABLE `like_table`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -57,10 +56,10 @@ ALTER TABLE `admin`
 --
 
 --
--- AUTO_INCREMENT for table `admin`
+-- AUTO_INCREMENT for table `like_table`
 --
-ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `like_table`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
